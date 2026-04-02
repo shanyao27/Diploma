@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Кабинет медика{% endblock %}
+
+{% block content %}
+<div class="notification" id="login-notification">
+    <div class="notification-content">
+        Вы вошли как: <strong>{{ user_login }}</strong> (Медработник)
+    </div>
+    <button class="notification-close" onclick="closeNotification('login-notification')">
+        <i class="bi bi-x-lg"></i>
+    </button>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-3 mb-3 d-flex">
+        <div class="card h-100 w-100">
+            <div class="card-body text-center">
+                <h5>Осмотров сегодня</h5>
+                <p class="text-muted">{{ medic_stats.checks_total }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3 d-flex">
+        <div class="card h-100 w-100">
+            <div class="card-body text-center">
+                <h5>Допущено</h5>
+                <p class="text-muted">{{ medic_stats.fit_total }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3 d-flex">
+        <div class="card h-100 w-100">
+            <div class="card-body text-center">
+                <h5>Не допущено</h5>
+                <p class="text-muted">{{ medic_stats.unfit_total }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3 d-flex">
+        <div class="card h-100 w-100">
+            <div class="card-body text-center">
+                <h5>На больничном</h5>
+                <p class="text-muted">{{ medic_stats.sick_total }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-3 mb-3">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <h5>Сотрудники</h5>
+                <p class="text-muted">Список и поиск</p>
+                <a href="{% url 'profiles:medic_employees_list' %}" class="btn btn-outline-success">Перейти</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <h5>Медосмотры</h5>
+                <p class="text-muted">Журнал осмотров</p>
+                <a href="{% url 'profiles:medic_medical_checks_list' %}" class="btn btn-outline-success">Перейти</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <h5>Новый медосмотр</h5>
+                <p class="text-muted">Утро / вечер</p>
+                <a href="{% url 'profiles:medic_medical_check_create' %}" class="btn btn-outline-success">Перейти</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <h5>Больничные</h5>
+                <p class="text-muted">Выдача и контроль</p>
+                <a href="{% url 'profiles:medic_sick_leaves_list' %}" class="btn btn-outline-success">Перейти</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function closeNotification(id) {
+    const notification = document.getElementById(id);
+    if (notification) {
+        notification.style.animation = 'fadeOut 0.3s ease';
+        setTimeout(() => notification.remove(), 200);
+    }
+}
+</script>
+{% endblock %}

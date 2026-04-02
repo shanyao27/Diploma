@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Анкета пользователя{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2>Анкета сотрудника</h2>
+  <a href="{% url 'profiles:admin_users_list' %}" class="btn btn-outline-secondary">Назад</a>
+</div>
+<div class="row g-4">
+  <div class="col-lg-6">
+    <div class="card"><div class="card-header"><h5 class="mb-0">Основные данные</h5></div><div class="card-body">
+      <table class="table table-sm">
+        <tr><th>ID</th><td>{{ user.id }}</td></tr>
+        <tr><th>Логин</th><td>{{ user.login }}</td></tr>
+        <tr><th>Паспорт</th><td>{{ user.passportData }}</td></tr>
+        <tr><th>Статус</th><td>{{ user.get_employment_status_display }}</td></tr>
+        <tr><th>Блокировка</th><td>{% if user.active_block %}Да, до {{ user.active_block.expires_at|date:"d.m.Y H:i" }}{% else %}Нет{% endif %}</td></tr>
+      </table>
+      <hr>
+      <form method="post" class="mb-3">{% csrf_token %}
+        <input type="hidden" name="action" value="save_profile">
+        {% for field in form %}
+        <div class="mb-3"><label class="form-label">{{ field.label }}</label>{{ field }}{% if field.errors %}<div class="text-danger small">{{ field.errors }}</div>{% endif %}</div>
+        {% endfor %}
+        <button class="btn btn-primary">Сохранить анкету</button>
+      </form>
+    </div></div>
+  </div>
+  <div class="col-lg-6">
+    <div class="card mb-4"><div class="card-header"><h5 class="mb-0">Действия</h5></div><div class="card-body">
+      <div class="mb-3 small">Санкции: предупреждения {{ user.sanction_counts.warning }}, объяснительные {{ user.sanction_counts.explanation }}, штрафы {{ user.sanction_counts.fine }}, отстранения {{ user.sanction_counts.suspension }}</div>
+      <form method="post" class="mb-3">{% csrf_token %}
+        <input type="hidden" name="action" value="assign_test">
+        <div class="mb-2"><label class="form-label">{{ assign_form.test.label }}</label>{{ assign_form.test }}</div>
+        <div class="mb-2"><label class="form-label">{{ assign_form.target_mode.label }}</label>{{ assign_form.target_mode }}</div>
+        <button class="btn btn-success">Назначить тест</button>
+      </form>
+      {% if user.active_block %}
+      <form method="post">{% csrf_token %}<input type="hidden" name="action" value="remove_block"><button class="btn btn-outline-success">Снять блокировку</button></form>
+      {% else %}
+      <form method="post">{% csrf_token %}<input type="hidden" name="action" value="call_to_admin"><button class="btn btn-outline-danger">Вызвать к себе</button></form>
+      {% endif %}
+    </div></div>
+    <div class="card"><div class="card-header"><h5 class="mb-0">История нарушений и санкций</h5></div><div class="card-body">
+      <div class="table-responsive"><table class="table table-sm align-middle">
+        <thead><tr><th>Дата</th><th>Основание</th><th>Санкция</th><th>Статус</th><th>Наряд</th></tr></thead>
+        <tbody>
+          {% for item in sanctions %}
+          <tr><td>{{ item.created_at|date:"d.m.Y H:i" }}</td><td>{{ item.violation_type.name|default:'—' }}</td><td>{{ item.get_sanction_type_display }}</td><td>{{ item.get_status_display }}</td><td>{% if item.work_object %}#{{ item.work_object.id }}{% else %}—{% endif %}</td></tr>
+          {% empty %}<tr><td colspan="5" class="text-center text-muted">Пока нет санкций</td></tr>{% endfor %}
+        </tbody>
+      </table></div>
+    </div></div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Мои наряды{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4"><h2>Мои наряды</h2></div>
+<div class="mb-3 btn-group">
+  <a href="?status=all" class="btn btn-outline-success {% if request.GET.status == 'all' or not request.GET.status %}active{% endif %}">Все</a>
+  <a href="?status=active" class="btn btn-outline-success {% if request.GET.status == 'active' %}active{% endif %}">Активные</a>
+  <a href="?status=completed" class="btn btn-outline-success {% if request.GET.status == 'completed' %}active{% endif %}">Завершенные</a>
+</div>
+<div class="card"><div class="card-body">
+{% if my_works %}
+<div class="table-responsive"><table class="table table-bordered align-middle">
+<thead><tr><th>ID</th><th>Зона</th><th>Вид работ</th><th>Дата и время</th><th>Статус</th><th>Подробнее</th><th>Действие</th></tr></thead>
+<tbody>
+{% for work in my_works %}
+<tr>
+  <td>{{ work.id }}</td>
+  <td>{{ work.zone|default:work.address }}</td>
+  <td>{{ work.work_type|default:'—' }}</td>
+  <td>{{ work.time|date:"d.m.Y H:i" }}</td>
+  <td>{{ work.get_status_display }}</td>
+  <td class="small">Старший: {{ work.leadEmployee.FIO|default:'не назначен' }}<br>Состав: {{ work.employees.count }} чел.<br>Оплата: {{ work.payment }} ₽</td>
+  <td>
+    {% if work.leadEmployee_id == user.id and work.status != 'completed' %}
+    <form method="post">{% csrf_token %}<input type="hidden" name="action" value="complete"><input type="hidden" name="work_id" value="{{ work.id }}"><button class="btn btn-sm btn-success" onclick="return confirm('Завершить наряд #{{ work.id }}?')">Завершить наряд</button></form>
+    {% else %}—{% endif %}
+  </td>
+</tr>
+{% endfor %}
+</tbody></table></div>
+{% else %}<div class="alert alert-success text-center mb-0">Вам пока не назначены наряды.</div>{% endif %}
+</div></div>
+{% endblock %}

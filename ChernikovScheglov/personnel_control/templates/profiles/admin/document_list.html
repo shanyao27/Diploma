@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Управление документами{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Управление документами</h1>
+        <a href="{% url 'profiles:admin_document_create' %}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Загрузить новый документ
+        </a>
+    </div>
+
+    {% if documents %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Название</th>
+                        <th>Категория</th>
+                        <th>Дата создания</th>
+                        <th>Статистика подписания</th>
+                        <th>Файл</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for doc in documents %}
+                    <tr>
+                        <td style="vertical-align: middle;">{{ doc.id }}</td>
+                        <td style="vertical-align: middle;">{{ doc.title }}</td>
+                        <td style="vertical-align: middle;">{{ doc.get_category_display }}</td>
+                        <td style="vertical-align: middle;">{{ doc.created_at|date:"d.m.Y H:i" }}</td>
+                        <td style="vertical-align: middle;">
+                            <small class="text-muted">
+                                Подписали: {{ doc.signed_count }} | Ожидают: {{ doc.pending_count }}
+                            </small>
+                        </td>
+                        <td style="vertical-align: middle;"> 
+                            <a href="{{ doc.file.url }}" target="_blank" class="btn btn-sm btn-outline-success">
+                                <i class="bi bi-file-pdf"></i> PDF
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            Нет загруженных документов. <a href="{% url 'profiles:admin_document_create' %}">Загрузить первый документ</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

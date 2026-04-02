@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Домик справа сверху в том же стиле (будет на всех публичных страницах) -->
+<div style="position: fixed; top: 20px; right: 20px; z-index: 10000;">
+    <a href="{% url 'main_page:main_page' %}" 
+       class="d-inline-flex align-items-center justify-content-center text-decoration-none"
+       style="width: 50px; height: 50px; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 50%; color: var(--dark-green, #1e3a2f); transition: all 0.2s; box-shadow: 0 4px 15px rgba(30, 58, 47, 0.1);"
+       onmouseover="this.style.background='rgba(255, 255, 255, 0.3)'; this.style.transform='scale(1.1)';"
+       onmouseout="this.style.background='rgba(255, 255, 255, 0.2)'; this.style.transform='scale(1)';"
+       title="На главную">
+        <i class="bi bi-house-door" style="font-size: 1.5rem;"></i>
+    </a>
+</div>
+
+<!-- Блок для дополнительных кнопок слева (например, "Назад") -->
+{% block extra_buttons %}{% endblock %}
+
+<!-- Основной контент -->
+<div class="row justify-content-center min-vh-100 align-items-center" style="margin-top: -50px;">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow">
+            <div class="card-body p-4">
+                {% block public_content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

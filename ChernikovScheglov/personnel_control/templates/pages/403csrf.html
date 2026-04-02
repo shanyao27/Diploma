@@ -1,0 +1,12 @@
+{% extends "pages/base_error.html" %}
+{% load static %}
+
+{% block title %}403 - Доступ запрещен{% endblock %}
+{% block error_code %}Доступ запрещен{% endblock %}
+{% block error_message %}
+    <strong>У Вас нет разрешения на доступ к этой странице</strong><br>
+{% endblock %}
+
+{% block image %}
+    <img src="{% static 'images/403.png' %}" alt="403 Error" class="error-image">
+{% endblock %}

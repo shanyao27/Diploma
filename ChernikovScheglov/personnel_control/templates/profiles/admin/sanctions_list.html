@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title %}Санкции{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4"><h2>Санкции</h2><a href="{% url 'profiles:admin_sanction_create' %}" class="btn btn-primary">Новая санкция</a></div>
+<div class="card"><div class="card-body"><div class="table-responsive"><table class="table table-striped align-middle"><thead><tr><th>Дата</th><th>Сотрудник</th><th>Основание</th><th>Санкция</th><th>Статус</th><th>До</th></tr></thead><tbody>
+{% for item in sanctions %}<tr><td>{{ item.created_at|date:"d.m.Y" }}</td><td>{{ item.employee.FIO }}</td><td>{{ item.violation_type.name|default:"—" }}</td><td>{{ item.get_sanction_type_display }}</td><td>{{ item.get_status_display }}</td><td>{{ item.expires_at|date:"d.m.Y"|default:"—" }}</td></tr>{% empty %}<tr><td colspan="6" class="text-center text-muted">Санкций пока нет</td></tr>{% endfor %}
+</tbody></table></div></div></div>
+{% endblock %}

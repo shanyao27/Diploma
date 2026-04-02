@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+
+{% block title %}Заказ-наряды{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Заказ-наряды</h2>
+            <div>
+                <a href="{% url 'profiles:admin_workobject_create' %}" class="btn btn-primary">Создать наряд</a>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-body">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                
+                <!-- Фильтр по статусу -->
+                <div class="mb-3">
+                    <div class="btn-group" role="group">
+                        <a href="?status=all" class="btn btn-outline-success {% if request.GET.status == 'all' or not request.GET.status %}active{% endif %}">Все</a>
+                        <a href="?status=recruiting" class="btn btn-outline-success {% if request.GET.status == 'recruiting' %}active{% endif %}">В наборе</a>
+                        <a href="?status=completed" class="btn btn-outline-success {% if request.GET.status == 'completed' %}active{% endif %}">Завершенные</a>
+                    </div>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Адрес</th>
+                                <th>Требуется</th>
+                                <th>Записано</th>
+                                <th>Старший</th>
+                                <th>Статус</th>
+                                <th>Оплата</th>
+                                <th>Время</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for wo in work_objects %}
+                            <tr class="{% if wo.is_completed %}table-secondary{% endif %}">
+                                <td>{{ wo.id }}</td>
+                                <td>{{ wo.address }}</td>
+                                <td>{{ wo.employeesNeeded }}</td>
+                                <td>{{ wo.employees.count }}</td>
+                                <td>
+                                    {% if wo.leadEmployee %}
+                                        {{ wo.leadEmployee.FIO }}
+                                    {% else %}
+                                        {% if not wo.is_completed and wo.employees.count > 0 %}
+                                            <button type="button" 
+                                                    class="btn btn-sm btn-outline-success" 
+                                                    data-bs-toggle="modal" 
+                                                    data-bs-target="#assignLeadModal{{ wo.id }}">
+                                                Назначить
+                                            </button>
+                                        {% endif %}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if wo.is_completed %}
+                                        Завершен
+                                    {% elif wo.employeesReady %}
+                                        Укомплектован
+                                    {% else %}
+                                        Набор
+                                    {% endif %}
+                                </td>
+                                <td>{{ wo.payment }} ₽</td>
+                                <td>
+                                    {{ wo.time|date:"d.m.Y H:i" }}
+                                </td>
+                                <td>
+                                    {% if not wo.is_completed %}
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <a href="{% url 'profiles:admin_workobject_edit' wo.id %}" 
+                                           class="btn btn-outline-success" 
+                                           title="Редактировать">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <button type="button" 
+                                                class="btn btn-outline-success" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#deleteModal{{ wo.id }}"
+                                                title="Удалить">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="9" class="text-center">Нет нарядов</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальные окна - ВЫНЕСЕНЫ ИЗ ТАБЛИЦЫ -->
+{% for wo in work_objects %}
+    {% if wo.employees.count > 0 and not wo.leadEmployee and not wo.is_completed %}
+    <!-- Модальное окно назначения старшего -->
+    <div class="modal fade" id="assignLeadModal{{ wo.id }}" tabindex="-1" aria-labelledby="assignLeadModalLabel{{ wo.id }}" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="assignLeadModalLabel{{ wo.id }}">Назначение старшего - Наряд #{{ wo.id }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="post" action="{% url 'profiles:admin_workobject_assign_lead' wo.id %}">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <p>Выберите старшего сотрудника из записанных:</p>
+                        <select name="employee_id" class="form-select" required>
+                            <option value="">-- Выберите сотрудника --</option>
+                            {% for emp in wo.employees.all %}
+                                <option value="{{ emp.id }}">{{ emp.FIO }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                        <button type="submit" class="btn btn-success">Назначить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    <!-- Модальное окно подтверждения удаления -->
+    <div class="modal fade" id="deleteModal{{ wo.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ wo.id }}" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel{{ wo.id }}">Подтверждение удаления</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Вы уверены, что хотите удалить наряд #{{ wo.id }}?</p>
+                    <p><strong>Адрес:</strong> {{ wo.address }}</p>
+                    <p><strong>Время:</strong> {{ wo.time|date:"d.m.Y H:i" }}</p>
+                    
+                    {% if wo.employees.count > 0 %}
+                        <div class="alert alert-warning">
+                            <i class="bi bi-exclamation-triangle"></i>
+                            Внимание! На этот наряд уже записано {{ wo.employees.count }} сотрудников. 
+                            При удалении наряда все записи будут потеряны.
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <form method="post" action="{% url 'profiles:admin_workobject_delete' wo.id %}" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Удалить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+
+<!-- Подключение Bootstrap Icons (уже есть в base.html, но на всякий случай) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<script>
+// Автоматическое обновление статуса каждую минуту
+setInterval(function() {
+    location.reload();
+}, 60000); // 60000 мс = 1 минута
+</script>
+
+<style>
+    .btn-group {
+        gap: 5px;
+    }
+    .table td {
+        vertical-align: middle;
+    }
+    .badge {
+        font-size: 0.9em;
+        padding: 0.5em 0.7em;
+    }
+    .table-secondary {
+        background-color: #f8f9fa;
+    }
+</style>
+{% endblock %}

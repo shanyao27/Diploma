@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Медосмотр{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Медосмотр сотрудника</h2>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <p><strong>Сотрудник:</strong> {{ check.employee.FIO }}</p>
+            <p><strong>Участок:</strong> {{ check.employee.department }}</p>
+            <p><strong>Должность:</strong> {{ check.employee.position }}</p>
+            <p><strong>Медик:</strong> {{ check.medic.FIO|default:"—" }}</p>
+            <p><strong>Дата и время:</strong> {{ check.checked_at|date:"d.m.Y H:i" }}</p>
+            <p><strong>Тип осмотра:</strong> {{ check.get_check_type_display }}</p>
+            <p><strong>Решение:</strong> {{ check.get_decision_display }}</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <p><strong>Давление:</strong> {{ check.blood_pressure|default:"—" }}</p>
+            <p><strong>Температура:</strong> {{ check.temperature|default:"—" }}</p>
+            <p><strong>Пульс:</strong> {{ check.pulse|default:"—" }}</p>
+            <p><strong>Жалобы:</strong> {{ check.complaints|default:"—" }}</p>
+            <p><strong>Трезв:</strong> {% if check.is_sober %}Да{% else %}Нет{% endif %}</p>
+            <p><strong>Комментарий медика:</strong> {{ check.medic_comment|default:"—" }}</p>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <a href="{% url 'profiles:medic_medical_checks_list' %}" class="btn btn-outline-secondary">Назад</a>
+    </div>
+</div>
+{% endblock %}

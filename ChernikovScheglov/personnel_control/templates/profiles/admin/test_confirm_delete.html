@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Удаление теста{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h4>Подтверждение удаления</h4>
+                </div>
+                <div class="card-body">
+                    <p class="fs-5">Вы уверены, что хотите удалить тест:</p>
+                    <p class="fw-bold">"{{ test.title }}"</p>
+                    
+                    <div class="alert alert-success">
+                        Внимание! Будут удалены:
+                        <ul class="mb-0 mt-2">
+                            <li>Сам тест</li>
+                            <li>Все вопросы ({{ test.questions.count }} шт.)</li>
+                            <li>Все ответы пользователей</li>
+                            <li>История попыток</li>
+                        </ul>
+                    </div>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="d-flex justify-content-between">
+                            <button type="submit" class="btn btn-danger">
+                                Да, удалить
+                            </button>
+                            <a href="{% url 'profiles:admin_test_list' %}" class="btn btn-outline-secondary">
+                                Отмена
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

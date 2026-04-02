@@ -1,0 +1,44 @@
+{% extends "base_public.html" %}
+
+{% block title %}Регистрация сотрудника{% endblock %}
+
+{% block public_content %}
+<h2 class="text-center mb-4">Регистрация сотрудника</h2>
+
+{% if form.non_field_errors %}
+    <div class="alert alert-danger">
+        {{ form.non_field_errors }}
+    </div>
+{% endif %}
+
+<form method="post">
+    {% csrf_token %}
+    
+    {% for field in form %}
+        <div class="mb-3">
+            <label class="form-label">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}
+                <div class="text-danger small mt-1">{{ field.errors }}</div>
+            {% endif %}
+            {% if field.help_text %}
+                <div class="form-text">{{ field.help_text }}</div>
+            {% endif %}
+        </div>
+    {% endfor %}
+    
+    <div class="alert alert-success mt-3">
+        <small>
+            Логин будет сгенерирован автоматически на основе вашего ФИО.
+        </small>
+    </div>
+    
+    <button type="submit" class="btn btn-primary w-100 mt-3">
+        Зарегистрироваться
+    </button>
+</form>
+
+<p class="text-center mt-3">
+    Уже есть аккаунт? <a href="{% url 'main_page:login' %}">Войти</a>
+</p>
+{% endblock %}

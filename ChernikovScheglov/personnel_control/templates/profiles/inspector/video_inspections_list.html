@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Проверка видео (СИЗ){% endblock %}
+{% block content %}
+<div class="d-flex align-items-center justify-content-between mb-3">
+  <h3 class="mb-0">Проверка видео (СИЗ)</h3>
+  <a href="{% url 'profiles:inspector_video_inspection_create' %}" class="btn btn-outline-success">Загрузить видео</a>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    {% if inspections %}
+      <div class="table-responsive">
+        <table class="table table-sm align-middle">
+          <thead>
+            <tr>
+              <th>ID</th><th>Объект</th><th>Параметры</th><th>Статус</th><th>Создано</th><th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in inspections %}
+              <tr>
+                <td>#{{ i.id }}</td>
+                <td>{{ i.object_number }}</td>
+                <td>
+                  {% if i.check_helmet %}каски{% endif %}
+                  {% if i.check_helmet and i.check_mask %} + {% endif %}
+                  {% if i.check_mask %}маски{% endif %}
+                  , {{ i.violation_seconds }} сек, шаг {{ i.frame_stride }}
+                </td>
+                <td>
+                  {% if i.status == 'done' %}
+                    <span class="badge bg-success">готово</span>
+                  {% elif i.status == 'processing' %}
+                    <span class="badge bg-warning text-dark">обработка</span>
+                  {% elif i.status == 'failed' %}
+                    <span class="badge bg-danger">ошибка</span>
+                  {% else %}
+                    <span class="badge bg-secondary">в очереди</span>
+                  {% endif %}
+                </td>
+                <td>{{ i.created_at|date:"d.m.Y H:i" }}</td>
+                <td class="text-end">
+                  <a class="btn btn-outline-success btn-sm" href="{% url 'profiles:inspector_video_inspection_detail' i.id %}">Открыть</a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p class="text-muted mb-0">Пока нет проверок. Нажми «Загрузить видео».</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

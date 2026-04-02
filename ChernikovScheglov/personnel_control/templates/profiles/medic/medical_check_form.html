@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Новый медосмотр{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>{{ title }}</h2>
+
+    {% if employee_obj %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <p><strong>Сотрудник:</strong> {{ employee_obj.FIO }}</p>
+            <p><strong>Участок:</strong> {{ employee_obj.department }}</p>
+            <p><strong>Должность:</strong> {{ employee_obj.position }}</p>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="card">
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-outline-success">Сохранить</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

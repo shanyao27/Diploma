@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Нарушения СИЗ{% endblock %}
+{% block content %}
+<h3 class="mb-3">Мои подтверждённые нарушения СИЗ</h3>
+
+{% if violations %}
+  <div class="table-responsive">
+    <table class="table table-sm align-middle">
+      <thead>
+        <tr>
+          <th>Скрин</th>
+          <th>Дата</th>
+          <th>Тип</th>
+          <th>Наряд</th>
+          <th>Время в видео</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for v in violations %}
+          <tr>
+            <td style="width:220px;">
+              <a href="{{ v.image.url }}" target="_blank">
+                <img src="{{ v.image.url }}" style="max-width:200px;border:1px solid #ddd;border-radius:8px;">
+              </a>
+            </td>
+            <td>{{ v.created_at|date:"d.m.Y H:i" }}</td>
+            <td><b>{{ v.get_violation_type_display }}</b></td>
+            <td>
+              {% if v.inspection.work_object %}
+                {{ v.inspection.work_object }}
+              {% else %}
+                {{ v.inspection.object_number }}
+              {% endif %}
+            </td>
+            <td>{{ v.timestamp_sec|floatformat:1 }} сек</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  <p class="text-muted">Пока нет подтверждённых нарушений.</p>
+{% endif %}
+{% endblock %}

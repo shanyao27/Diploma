@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}Редактирование теста{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 style="color: white;">{{ test.title }}</h3>
+                    <p class="text-white mb-0">{{ test.description }}</p>
+                </div>
+                <div class="card-body">
+                    <h5>Существующие вопросы ({{ questions.count }})</h5>
+                    
+                    {% if questions %}
+                        <div class="list-group mb-4">
+                            {% for question in questions %}
+                                <div class="list-group-item">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div class="flex-grow-1">
+                                            <strong>Вопрос {{ forloop.counter }}:</strong> 
+                                            <p class="mt-2">{{ question.text }}</p>
+                                            
+                                            <div class="ms-3 mt-2">
+                                                <div class="mb-1">
+                                                    <strong>1)</strong> {{ question.option1 }}
+                                                </div>
+                                                <div class="mb-1">
+                                                    <strong>2)</strong> {{ question.option2 }}
+                                                </div>
+                                                <div class="mb-1">
+                                                    <strong>3)</strong> {{ question.option3 }}
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="mt-2">
+                                                    Правильный ответ: Вариант {{ question.correct_answer }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="alert alert-success">
+                            В этом тесте пока нет вопросов. Добавьте первый вопрос.
+                        </div>
+                    {% endif %}
+                    
+                    <hr>
+                    
+                    <h5 class="mb-3">Добавить новый вопрос</h5>
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.text.id_for_label }}" class="form-label">Текст вопроса</label>
+                            {{ form.text }}
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="{{ form.option1.id_for_label }}" class="form-label">Вариант 1</label>
+                                {{ form.option1 }}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="{{ form.option2.id_for_label }}" class="form-label">Вариант 2</label>
+                                {{ form.option2 }}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="{{ form.option3.id_for_label }}" class="form-label">Вариант 3</label>
+                                {{ form.option3 }}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.correct_answer.id_for_label }}" class="form-label">Правильный ответ</label>
+                            {{ form.correct_answer }}
+                        </div>
+                        
+                        <button type="submit" name="add_question" class="btn btn-success">
+                            <i class="bi bi-plus-circle"></i> Добавить вопрос
+                        </button>
+                    </form>
+                    
+                    <div class="mt-4 d-flex justify-content-between">
+                        <a href="{% url 'profiles:admin_test_list' %}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i> Отмена
+                        </a>
+                        <form method="post" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" name="finish" class="btn btn-primary">
+                                <i class="bi bi-check-circle"></i> Завершить и сохранить
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Информация</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Создан:</strong> {{ test.created_at|date:"d.m.Y H:i" }}</p>
+                    <p><strong>Всего вопросов:</strong> {{ questions.count }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

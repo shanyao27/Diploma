@@ -1,0 +1,60 @@
+<!-- profiles/templates/profiles/user/available_works.html -->
+{% extends "base.html" %}
+
+{% block title %}Доступные наряды{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Доступные наряды</h2>
+        </div>
+        
+        {% if not user.AllowedToWork %}
+            <div class="alert alert-warning">
+                <i class="bi bi-exclamation-triangle"></i>
+                <strong>Внимание!</strong> Вы не допущены к работам.
+                <ul class="mb-0 mt-2">
+                    {% if not user.noCertifications %}
+                        <li>Пройдите все аттестации</li>
+                    {% endif %}
+                    {% if not user.noDocuments %}
+                        <li>Ознакомьтесь с документами</li>
+                    {% endif %}
+                </ul>
+            </div>
+        {% else %}
+            <div class="row">
+                {% for work in available_works %}
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">Наряд #{{ work.id }}</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Адрес:</strong> {{ work.address }}</p>
+                            <p><strong>Время:</strong> {{ work.time|date:"d.m.Y H:i" }}</p>
+                            <p><strong>Оплата:</strong> {{ work.payment }} ₽</p>
+                            <p><strong>Требуется сотрудников:</strong> {{ work.employeesNeeded }}</p>
+                            <p><strong>Уже записалось:</strong> {{ work.employees.count }}</p>
+                            
+                            {% if user in work.employees.all %}
+                                <span class="badge bg-success">Вы уже записаны</span>
+                            {% else %}
+                                <a href="{% url 'profiles:user_signup_work' work.id %}" class="btn btn-primary">
+                                    Записаться
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <div class="alert alert-info">Нет доступных нарядов</div>
+                </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

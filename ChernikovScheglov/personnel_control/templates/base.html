@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Система управления{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        :root {
+            --dark-green: #1e3a2f;
+            --medium-green: #2b5e4b;
+            --light-green: #3f7864;
+            --bg-green: #e8f3ed;
+            --white: #ffffff;
+        }
+        
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            background-color: var(--bg-green);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: var(--dark-green);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        .container {
+            flex: 1 0 auto;
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+        
+        body:not(:has(.menu-container)) .container {
+            padding-top: 40px;
+        }
+        
+        /* МЕНЮ И ДОМИК */
+        .menu-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .home-button {
+            width: 50px;  /* Увеличено с 40px до 50px */
+            height: 50px; /* Увеличено с 40px до 50px */
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            color: var(--dark-green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(30, 58, 47, 0.1);
+        }
+
+        .home-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(43, 94, 75, 0.2);
+        }
+
+        .home-button i {
+            font-size: 1.5rem; /* Увеличено с 1.2rem до 1.5rem */
+            color: var(--dark-green);
+}
+        
+        .menu-button {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: var(--dark-green);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(30, 58, 47, 0.1);
+            transition: all 0.2s;
+        }
+        
+        .menu-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(43, 94, 75, 0.2);
+        }
+        
+        .menu-button i {
+            font-size: 1.5rem;
+            color: var(--dark-green);
+        }
+        
+        .menu-dropdown {
+            position: absolute;
+            top: 108px; /* 40px (домик) + 50px (меню) + 8px (gap) + 10px запас */
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            min-width: 280px;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(30, 58, 47, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            display: none;
+        }
+        
+        .menu-container:hover .menu-dropdown,
+        .menu-dropdown:hover {
+            display: block;
+        }
+        
+        .menu-header {
+            background: linear-gradient(135deg, var(--dark-green), var(--medium-green));
+            color: var(--white);
+            padding: 1rem 1.2rem;
+            font-weight: 600;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .menu-header .badge {
+            margin-left: auto;
+            background: var(--light-green);
+            color: var(--white);
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 1.2rem;
+            color: var(--dark-green);
+            text-decoration: none;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+        
+        .menu-item:hover {
+            background: rgba(43, 94, 75, 0.1);
+            padding-left: 1.8rem;
+        }
+        
+        .menu-item i {
+            margin-right: 1rem;
+            width: 20px;
+            color: var(--medium-green);
+        }
+        
+        /* ВСЕ КНОПКИ - ТОЛЬКО ЗЕЛЕНЫЕ */
+        .btn, .btn-primary, .btn-secondary, .btn-success, 
+        .btn-danger, .btn-warning, .btn-info {
+            background: linear-gradient(135deg, var(--medium-green), var(--light-green));
+            border: none;
+            color: var(--white);
+            font-weight: 500;
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        
+        .btn:hover, .btn-primary:hover, .btn-secondary:hover,
+        .btn-success:hover, .btn-danger:hover, .btn-warning:hover,
+        .btn-info:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(43, 94, 75, 0.3);
+            background: linear-gradient(135deg, #1e4a3a, #2e6852);
+        }
+        
+        /* Outline кнопки */
+        .btn-outline-primary, .btn-outline-secondary, .btn-outline-success,
+        .btn-outline-danger, .btn-outline-warning, .btn-outline-info {
+            background: transparent;
+            border: 2px solid var(--medium-green);
+            color: var(--medium-green);
+        }
+        
+        .btn-outline-primary:hover, .btn-outline-secondary:hover,
+        .btn-outline-success:hover, .btn-outline-danger:hover,
+        .btn-outline-warning:hover, .btn-outline-info:hover {
+            background-color: var(--medium-green);
+            color: var(--white);
+        }
+        
+        /* КАРТОЧКИ */
+        .card {
+            background-color: var(--white);
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(30, 58, 47, 0.05);
+            transition: all 0.3s;
+            overflow: hidden;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(30, 58, 47, 0.1);
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, var(--dark-green), var(--medium-green));
+            color: var(--white);
+            border: none;
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+        }
+
+        .card-header * {
+            color: var(--white);
+        }
+        
+        /* ТАБЛИЦЫ */
+        .table {
+            background-color: var(--white);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(30, 58, 47, 0.05);
+        }
+
+        .table thead {
+            background: linear-gradient(135deg, var(--dark-green), var(--medium-green));
+        }
+
+        .table thead tr {
+            background: transparent !important;
+        }
+
+        .table thead th {
+            color: var(--white) !important;
+            background: transparent !important;
+            padding: 1rem;
+            font-weight: 600;
+            border: none;
+            text-align: inherit;
+        }
+
+        .table thead th a,
+        .table thead th span,
+        .table thead th div {
+            color: var(--white) !important;
+        }
+
+        .table tbody td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--bg-green);
+            color: var(--dark-green);
+        }
+
+        .table tbody tr:hover {
+            background-color: var(--bg-green);
+        }
+
+        /* Переопределяем Bootstrap стили для таблиц */
+        .table > :not(caption) > * > * {
+            background: transparent;
+        }
+
+        .table thead th {
+            border-bottom: none;
+        }
+        
+        /* БЕЙДЖИ - ВСЕ ЗЕЛЕНЫЕ */
+        .badge, .badge-success, .badge-warning, .badge-info, .badge-danger,
+        .bg-success, .bg-warning, .bg-info, .bg-danger, .bg-primary {
+            background: var(--medium-green) !important;
+            color: var(--white) !important;
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            font-weight: 500;
+        }
+        
+        .badge.bg-primary {
+            background: var(--dark-green) !important;
+        }
+        
+        /* УВЕДОМЛЕНИЯ - ВСЕ С КРЕСТИКОМ И ВЫРАВНИВАНИЕМ СЛЕВА */
+        .notification {
+            background-color: rgba(43, 94, 75, 0.1);
+            border-left: 4px solid var(--medium-green);
+            color: var(--dark-green);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 12px rgba(30, 58, 47, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-align: left;
+        }
+        
+        .notification-content {
+            flex: 1;
+            text-align: left;
+        }
+        
+        .notification-content p {
+            margin: 0;
+            line-height: 1.5;
+        }
+        
+        .notification-content strong {
+            color: var(--medium-green);
+            font-weight: 600;
+        }
+        
+        .notification-close {
+            background: none;
+            border: none;
+            color: var(--dark-green);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0 0.5rem;
+            opacity: 0.5;
+            transition: opacity 0.2s;
+            line-height: 1;
+            margin-left: 1rem;
+        }
+        
+        .notification-close:hover {
+            opacity: 1;
+        }
+        
+        /* ФУТЕР */
+        .footer-custom {
+            background: #1a3a2e;
+            color: white;
+            padding: 1.5rem 0 1rem;
+            border-top: 3px solid #5fa07e;
+            flex-shrink: 0;
+            width: 100%;
+            margin-top: auto;
+            font-size: 0.9rem;
+        }
+
+        .footer-custom h5 {
+            color: white;
+            font-weight: 600;
+        }
+
+        .footer-custom p {
+            color: #f0f0f0;
+        }
+        
+        /* ЗАГОЛОВКИ */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            color: var(--dark-green);
+        }
+        
+        h2 {
+            position: relative;
+            padding-bottom: 0.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        h2:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--medium-green), var(--light-green));
+            border-radius: 3px;
+        }
+        
+        /* ФОРМЫ */
+        .form-control, .form-select {
+            border: 2px solid #c0d9d0;
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            transition: all 0.2s;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--medium-green);
+            box-shadow: 0 0 0 4px rgba(43, 94, 75, 0.1);
+        }
+        
+        /* ССЫЛКИ */
+        a {
+            color: var(--medium-green);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        a:hover {
+            color: var(--dark-green);
+        }
+        
+        /* ПАГИНАЦИЯ */
+        .pagination .page-link {
+            color: var(--medium-green);
+            border-color: var(--bg-green);
+        }
+        
+        .pagination .page-item.active .page-link {
+            background-color: var(--medium-green);
+            border-color: var(--medium-green);
+            color: var(--white);
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(10px);
+            }
+        }
+    </style>
+</head>
+<body>
+    {% if request.session.user_login and request.path != '/login/' %}
+    <div class="menu-container">
+        <!-- Домик -->
+        <a href="{% url 'profiles:dashboard' %}" class="home-button" title="На главную">
+            <i class="bi bi-house-door"></i>
+        </a>
+        
+        <!-- Меню -->
+        <div class="menu-button">
+            <i class="bi bi-list"></i>
+        </div>
+        <div class="menu-dropdown">
+            <div class="menu-header">
+                <i class="bi bi-person-circle"></i>
+                {{ request.session.user_login }}
+                <span class="badge">{{ request.session.user_role }}</span>
+            </div>
+            
+            {% if request.session.user_role == 'admin' %}
+            <a class="menu-item" href="{% url 'profiles:admin_users_list' %}">
+                <i class="bi bi-people"></i> Пользователи
+            </a>
+            <a class="menu-item" href="{% url 'profiles:admin_workobjects_list' %}">
+                <i class="bi bi-grid"></i> Заказ-наряды
+            </a>
+            <a class="menu-item" href="{% url 'profiles:admin_test_list' %}">
+                <i class="bi bi-journal"></i> Тесты
+            </a>
+            <a class="menu-item" href="{% url 'profiles:admin_document_list' %}">
+                <i class="bi bi-file-text"></i> Документы
+            </a>
+            
+            {% elif request.session.user_role == 'user' %}
+            <a class="menu-item" href="{% url 'profiles:user_test_list' %}">
+                <i class="bi bi-puzzle"></i> Аттестации
+            </a>
+            <a class="menu-item" href="{% url 'profiles:user_available_works' %}">
+                <i class="bi bi-calendar-plus"></i> Доступные наряды
+            </a>
+            <a class="menu-item" href="{% url 'profiles:user_current_works' %}">
+                <i class="bi bi-list-check"></i> Мои наряды
+            </a>
+            <a class="menu-item" href="{% url 'profiles:user_ppe_violations' %}">
+                <i class="bi bi-shield-exclamation"></i> Нарушения СИЗ
+            </a>
+            <a class="menu-item" href="{% url 'profiles:user_test_history' %}">
+                <i class="bi bi-clock-history"></i> История тестов
+            </a>
+
+            {% elif request.session.user_role == 'medic' %}
+            <a class="menu-item" href="{% url 'profiles:medic_employees_list' %}">
+                <i class="bi bi-people"></i> Сотрудники
+            </a>
+            <a class="menu-item" href="{% url 'profiles:medic_medical_checks_list' %}">
+                <i class="bi bi-heart-pulse"></i> Медосмотры
+            </a>
+            <a class="menu-item" href="{% url 'profiles:medic_medical_check_create' %}">
+                <i class="bi bi-clipboard2-plus"></i> Новый медосмотр
+            </a>
+            <a class="menu-item" href="{% url 'profiles:medic_sick_leaves_list' %}">
+                <i class="bi bi-hospital"></i> Больничные
+            </a>
+            <a class="menu-item" href="{% url 'profiles:medic_sick_leave_create' %}">
+                <i class="bi bi-file-medical"></i> Выдать больничный
+            </a>
+
+            {% elif request.session.user_role == 'inspector' %}
+            <a class="menu-item" href="{% url 'profiles:inspector_video_inspections' %}">
+                <i class="bi bi-camera-video"></i> Проверка видео (СИЗ)
+            </a>
+            {% endif %}
+            
+            <div class="menu-divider"></div>
+            
+            <a class="menu-item" href="{% url 'profiles:logout' %}">
+                <i class="bi bi-box-arrow-right"></i> Выйти
+            </a>
+        </div>
+    </div>
+    {% endif %}
+
+    <main class="container">
+        <!-- УВЕДОМЛЕНИЯ DJANGO MESSAGES -->
+        {% if messages %}
+            {% for message in messages %}
+            <div class="notification" id="message-{{ forloop.counter }}">
+                <div class="notification-content">
+                    {{ message }}
+                </div>
+                <button class="notification-close" onclick="closeNotification('message-{{ forloop.counter }}')">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            {% endfor %}
+        {% endif %}
+        
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer-custom">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-md-4">
+                    <h5>Дипломная работа</h5>
+                    <p>Черников А.О, Щеглов Е.А.</p>
+                    <p class="small text-white-50">"Тема дипломной работы"</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Корпоративная почта</h5>
+                    <p>
+                        chernikov.aol@dvfu.ru<br>
+                        shcheglov.ea@dvfu.ru
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Контактные данные</h5>
+                    <p>
+                        +7 (908) 981-88-83<br>
+                        +7 (914) 354-37-72
+                    </p>
+                </div>
+            </div>
+            <hr>
+            <p class="text-center small mb-0">© {% now "Y" %} Все права защищены</p>
+        </div>
+    </footer>
+
+    <script>
+        function closeNotification(id) {
+            const notification = document.getElementById(id);
+            if (notification) {
+                notification.style.animation = 'fadeOut 0.3s ease';
+                setTimeout(() => {
+                    notification.remove();
+                }, 200);
+            }
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

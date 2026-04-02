@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Подписание документа{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Подтверждение ознакомления</h5>
+            </div>
+            <div class="card-body">
+                <h5>{{ document.title }}</h5>
+                <p class="text-muted">{{ document.description }}</p>
+                
+                <hr>
+                
+                <p><strong>Я, {{ user.FIO }}, подтверждаю, что:</strong></p>
+                <ul>
+                    <li>ознакомился с документом "{{ document.title }}"</li>
+                    <li>понимаю его содержание</li>
+                    <li>принимаю все требования</li>
+                </ul>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            Подтвердить и подписать
+                        </button>
+                        <a href="{% url 'profiles:user_documents' %}" class="btn btn-outline-secondary">
+                            Отмена
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

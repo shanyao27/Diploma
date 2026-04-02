@@ -1,0 +1,156 @@
+<!-- profiles/templates/profiles/user/take_test.html -->
+{% extends "base.html" %}
+
+{% block title %}Прохождение теста: {{ test.title }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>{{ test.title }}</h2>
+                <a href="{% url 'profiles:user_test_list' %}" class="btn btn-outline-secondary">
+                    ← К списку тестов
+                </a>
+            </div>
+            
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>Вопрос {{ question_num }} из {{ total }}</span>
+                        <span class="badge bg-light text-dark">Прогресс: {{ progress }}%</span>
+                    </div>
+                    <div class="progress mt-2" style="height: 10px;">
+                        <div class="progress-bar bg-success" 
+                             role="progressbar" 
+                             style="width: {{ progress }}%;" 
+                             aria-valuenow="{{ progress }}" 
+                             aria-valuemin="0" 
+                             aria-valuemax="100"></div>
+                    </div>
+                </div>
+                
+                <div class="card-body">
+                    <!-- Блок с вопросом -->
+                    <div class="question-box p-4 bg-light rounded mb-4">
+                        <h4 class="mb-4">{{ question.text }}</h4>
+                        
+                        <div class="options-list">
+                            <div class="option-item p-3 mb-2 border rounded">
+                                <strong>1.</strong> {{ question.option1 }}
+                            </div>
+                            <div class="option-item p-3 mb-2 border rounded">
+                                <strong>2.</strong> {{ question.option2 }}
+                            </div>
+                            <div class="option-item p-3 mb-2 border rounded">
+                                <strong>3.</strong> {{ question.option3 }}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Форма с ответом -->
+                    <form method="post" class="mt-4">
+                        {% csrf_token %}
+                        
+                        <div class="mb-4">
+                            <label class="form-label fw-bold fs-5 mb-3">Выберите правильный ответ:</label>
+                            
+                            <div class="row g-3">
+                                {% for radio in form.answer %}
+                                    <div class="col-md-4">
+                                        <div class="form-check">
+                                            {{ radio.tag }}
+                                            <label class="form-check-label btn btn-outline-primary w-100 p-3" 
+                                                   for="{{ radio.id_for_label }}" 
+                                                   style="cursor: pointer; border-radius: 8px;">
+                                                {{ radio.choice_label }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            
+                            {% if form.answer.errors %}
+                                <div class="alert alert-danger mt-3">
+                                    {{ form.answer.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                Ответить и продолжить
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="card-footer text-muted">
+                    <small>Будьте внимательны! При неправильном ответе тест завершится.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-check-input {
+        display: none;
+    }
+    
+    .form-check-input:checked + .form-check-label {
+        background-color: var(--bs-primary);
+        color: white;
+        border-color: var(--bs-primary);
+        transform: scale(1.02);
+        transition: all 0.2s;
+    }
+    
+    .form-check-label {
+        display: block;
+        text-align: center;
+        font-size: 1.1rem;
+        transition: all 0.2s;
+    }
+    
+    .form-check-label:hover {
+        background-color: #e9ecef;
+        transform: scale(1.02);
+    }
+    
+    .option-item {
+        background-color: white;
+        font-size: 1.1rem;
+    }
+    
+    .option-item:hover {
+        background-color: #f8f9fa;
+        border-color: #0d6efd !important;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const radioButtons = document.querySelectorAll('.form-check-input');
+        
+        radioButtons.forEach(radio => {
+            radio.addEventListener('change', function() {
+                // Убираем выделение со всех кнопок
+                document.querySelectorAll('.form-check-label').forEach(label => {
+                    label.style.backgroundColor = '';
+                    label.style.color = '';
+                    label.style.borderColor = '';
+                });
+                
+                // Выделяем выбранную кнопку
+                if (this.checked) {
+                    const label = document.querySelector(`label[for="${this.id}"]`);
+                    label.style.backgroundColor = '#0d6efd';
+                    label.style.color = 'white';
+                    label.style.borderColor = '#0d6efd';
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

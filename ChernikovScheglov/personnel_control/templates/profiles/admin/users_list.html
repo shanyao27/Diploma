@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}Список пользователей{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2>Сотрудники{% if admin_obj and admin_obj.department %} участка {{ admin_obj.department.name }}{% endif %}</h2>
+  <a href="{% url 'profiles:admin_assign_all_tests' %}" class="btn btn-success" onclick="return confirm('Назначить доступные тесты всем сотрудникам в текущей выборке?')">Назначить все тесты</a>
+</div>
+
+<div class="card mb-3"><div class="card-body">
+  <form method="get" class="row g-2">
+    <div class="col-md-5"><input type="text" name="q" class="form-control" placeholder="Поиск по ФИО, логину, телефону" value="{{ search_query }}"></div>
+    <div class="col-md-3">
+      <select name="status" class="form-select">
+        <option value="all" {% if current_filter == 'all' %}selected{% endif %}>Все статусы</option>
+        <option value="active" {% if current_filter == 'active' %}selected{% endif %}>Активные</option>
+        <option value="inactive" {% if current_filter == 'inactive' %}selected{% endif %}>Неактивные</option>
+        <option value="suspended" {% if current_filter == 'suspended' %}selected{% endif %}>Отстраненные</option>
+        <option value="sick_leave" {% if current_filter == 'sick_leave' %}selected{% endif %}>На больничном</option>
+      </select>
+    </div>
+    <div class="col-md-2"><button class="btn btn-primary w-100">Применить</button></div>
+  </form>
+</div></div>
+
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h5 class="mb-0">Пользователи</h5>
+    <button type="button" class="btn btn-success btn-sm" onclick="confirmSelectedUsers()">Подтвердить выбранных</button>
+  </div>
+  <div class="card-body">
+    <form id="users-form" method="post" action="{% url 'profiles:confirm_users' %}">{% csrf_token %}
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th><input type="checkbox" id="select-all" onclick="toggleAll(this)"></th>
+              <th>ID</th><th>ФИО</th><th>Участок</th><th>Телефон</th><th>Статус</th><th>Санкции</th><th>Внимание</th><th>Действия</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for user in users %}
+            <tr class="{% if user.needs_attention %}table-warning{% endif %}">
+              <td><input type="checkbox" name="selected_users" value="{{ user.id }}" class="user-checkbox" {% if user.isActive %}disabled{% endif %}></td>
+              <td>{{ user.id }}</td>
+              <td>
+                <div class="fw-semibold">{{ user.FIO }}</div>
+                <div class="text-muted small">{{ user.login }}</div>
+              </td>
+              <td>{{ user.department.name|default:'—' }}</td>
+              <td>{{ user.number }}</td>
+              <td>
+                {% if user.active_block %}<span class="badge bg-danger">Заблокирован</span><br>{% endif %}
+                {% if user.isActive %}<span class="badge bg-success">Активен</span>{% else %}<span class="badge bg-secondary">Ожидает подтверждения</span>{% endif %}
+                <div class="small text-muted mt-1">{{ user.get_employment_status_display }}</div>
+              </td>
+              <td class="small">
+                Предупр.: {{ user.sanction_counts.warning }}, объясн.: {{ user.sanction_counts.explanation }}, штрафы: {{ user.sanction_counts.fine }}, отстран.: {{ user.sanction_counts.suspension }}
+              </td>
+              <td>
+                {% if user.needs_attention %}<span class="badge bg-warning text-dark">Нужно обратить внимание</span>{% else %}—{% endif %}
+              </td>
+              <td>
+                <div class="btn-group btn-group-sm">
+                  <a href="{% url 'profiles:admin_user_detail' user.id %}" class="btn btn-outline-primary">Анкета</a>
+                  {% if not user.isActive %}
+                  <a href="{% url 'profiles:admin_user_confirm' user.id %}" class="btn btn-outline-success" onclick="return confirm('Подтвердить сотрудника и назначить тесты?')">Подтвердить</a>
+                  {% endif %}
+                </div>
+              </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="9" class="text-center text-muted">Ничего не найдено</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </form>
+  </div>
+</div>
+<script>
+function toggleAll(source){document.querySelectorAll('.user-checkbox:not(:disabled)').forEach(cb=>cb.checked=source.checked)}
+function confirmSelectedUsers(){if(confirm('Подтвердить выбранных сотрудников и назначить доступные тесты?')) document.getElementById('users-form').submit();}
+</script>
+{% endblock %}

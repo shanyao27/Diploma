@@ -1,0 +1,43 @@
+{% extends "base_public.html" %}
+
+{% block title %}Вход в систему{% endblock %}
+
+{% block public_content %}
+<h2 class="text-center mb-4">Вход в систему</h2>
+
+<!-- Отображение ошибки формы -->
+{% if error %}
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+    {{ error }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endif %}
+
+<form method="post">
+    {% csrf_token %}
+    
+    <div class="mb-3">
+        <label class="form-label">{{ form.username.label }}</label>
+        {{ form.username }}
+        {% if form.username.errors %}
+            <div class="text-danger small mt-1">{{ form.username.errors }}</div>
+        {% endif %}
+    </div>
+    
+    <div class="mb-3">
+        <label class="form-label">{{ form.password.label }}</label>
+        {{ form.password }}
+        {% if form.password.errors %}
+            <div class="text-danger small mt-1">{{ form.password.errors }}</div>
+        {% endif %}
+    </div>
+    
+    <button type="submit" class="btn btn-primary w-100 mt-3">
+        Войти
+    </button>
+</form>
+
+<p class="text-center mt-3">
+    Нет аккаунта? <a href="{% url 'main_page:registration' %}">Зарегистрироваться</a>
+</p>
+{% endblock %}

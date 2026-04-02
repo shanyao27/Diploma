@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Нарушения{% endblock %}
+{% block content %}
+<h2 class="mb-4">Нарушения</h2>
+<div class="card"><div class="card-body">
+  <div class="mb-3">Всего нарушений и санкций: <b>{{ sanctions|length }}</b></div>
+  <div class="table-responsive"><table class="table table-bordered align-middle">
+    <thead><tr><th>Дата</th><th>Причина</th><th>Вид санкции</th><th>Статус</th><th>Наряд</th><th>Комментарий</th></tr></thead>
+    <tbody>
+      {% for item in sanctions %}
+      <tr>
+        <td>{{ item.created_at|date:"d.m.Y H:i" }}</td>
+        <td>{{ item.violation_type.name|default:'—' }}</td>
+        <td>{{ item.get_sanction_type_display }}</td>
+        <td>{{ item.get_status_display }}</td>
+        <td>{% if item.work_object %}#{{ item.work_object.id }}{% else %}—{% endif %}</td>
+        <td>{{ item.comment|default:'—' }}</td>
+      </tr>
+      {% empty %}<tr><td colspan="6" class="text-center text-muted">Нарушений пока нет</td></tr>{% endfor %}
+    </tbody>
+  </table></div>
+</div></div>
+{% endblock %}

@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}Мои документы{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Мои документы</h2>
+    
+    <!-- ДОКУМЕНТЫ, ТРЕБУЮЩИЕ ПОДПИСИ -->
+    {% if pending_docs %}
+    <div class="card mt-4 border-danger">
+        <div class="card-header bg-danger text-white">
+            <h5 class="mb-0">
+                Требуется подпись ({{ pending_docs.count }})
+                {% if pending_count > 0 and not user.noDocuments %}
+                <span class="badge bg-light text-dark ms-2">Доступ к работам закрыт</span>
+                {% endif %}
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="list-group">
+                {% for doc in pending_docs %}
+                <div class="list-group-item">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <strong>{{ doc.title }}</strong>
+                            {% if doc.description %}
+                                <br><small class="text-muted">{{ doc.description }}</small>
+                            {% endif %}
+                            <br>
+                            {{ doc.get_category_display }} от {{ doc.created_at|date:"d.m.Y" }}
+                        </div>
+                        <div class="col-auto">
+                            <a href="{% url 'profiles:view_document' doc.id %}" 
+                               class="btn btn-sm btn-primary" target="_blank">
+                                <i class="bi bi-eye"></i> Читать
+                            </a>
+                            <a href="{% url 'profiles:sign_document' doc.id %}" 
+                               class="btn btn-sm btn-success">
+                                <i class="bi bi-check-lg"></i> Подписать
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    <!-- УЖЕ ПОДПИСАННЫЕ ДОКУМЕНТЫ -->
+    {% if signed_docs %}
+    <div class="card mt-4 border-success">
+        <div class="card-header bg-success text-white">
+            <h5 class="mb-0">Подписано ({{ signed_docs.count }})</h5>
+        </div>
+        <div class="card-body">
+            <div class="list-group">
+                {% for doc in signed_docs %}
+                <div class="list-group-item">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <strong>{{ doc.title }}</strong>
+                            <br>
+                            <small class="text-muted">
+                                Подписан: 
+                                {% with signature=doc.signatures.all|first %}
+                                    {{ signature.signed_at|date:"d.m.Y H:i" }}
+                                {% endwith %}
+                            </small>
+                        </div>
+                        <div class="col-auto">
+                            Подписано
+                            <a href="{% url 'profiles:view_document' doc.id %}" 
+                               class="btn btn-sm btn-outline-success" target="_blank">
+                                <i class="bi bi-file-pdf"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    {% if not pending_docs and not signed_docs %}
+    <div class="alert alert-info mt-4">
+        У вас пока нет назначенных документов.
+    </div>
+    {% endif %}
+    
+    <!-- СТАТУС ДОПУСКА -->
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5>Статус допуска к работам:</h5>
+            {% if user.noDocuments %}
+                <div class="alert alert-success">
+                    Все документы подписаны. Вы допущены к работам.
+                </div>
+            {% else %}
+                <div class="alert alert-success">
+                    Подпишите все документы (осталось: {{ pending_docs.count }})
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

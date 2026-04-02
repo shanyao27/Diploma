@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Доступные тесты{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Доступные тесты</h2>
+    
+    <div class="row">
+        {% for test in tests %}
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>{{ test.title }}</h5>
+                        <p class="text-muted">{{ test.description|default:"Нет описания" }}</p>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <span class="badge bg-info">Вопросов: {{ test.questions.count }}</span>
+                            {% if test.id in passed_tests %}
+                            <span class="badge bg-success">Пройден</span>
+                            {% else %}
+                            <a href="{% url 'profiles:user_take_test' test.id %}" class="btn btn-primary btn-sm">Пройти</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info">Нет доступных тестов</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

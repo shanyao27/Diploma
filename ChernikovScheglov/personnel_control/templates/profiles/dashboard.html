@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+
+{% block title %}Личный кабинет{% endblock %}
+
+{% block content %}
+<!-- Уведомление о входе в систему - С КРЕСТИКОМ -->
+<div class="notification" id="login-notification">
+    <div class="notification-content">
+        Вы вошли как: <strong>{{ user_login }}</strong> 
+        ({% if user_role == 'admin' %}Администратор
+        {% elif user_role == 'inspector' %}Инспектор
+        {% elif user_role == 'user' %}Сотрудник{% endif %})
+    </div>
+    <button class="notification-close" onclick="closeNotification('login-notification')">
+        <i class="bi bi-x-lg"></i>
+    </button>
+</div>
+
+<!-- Блок Администратора -->
+{% if user_role == 'admin' %}
+<div class="row mt-4">
+    <div class="col-md-3 mb-3 d-flex">
+        <div class="card h-100 w-100">
+            <div class="card-body d-flex flex-column align-items-center text-center">
+                <h5>Список пользователей</h5>
+                <p class="text-muted">Просмотр всех пользователей</p>
+                <a href="{% url 'profiles:admin_users_list' %}" class="btn btn-outline-success btn-sm mt-auto" style="width: auto;">Перейти</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-3 d-flex">
+        <div class="card h-100 w-100">
+            <div class="card-body d-flex flex-column align-items-center text-center">
+                <h5>Заказ-наряды</h5>
+                <p class="text-muted">Создание и управление заказ-нарядами</p>
+                <a href="{% url 'profiles:admin_workobjects_list' %}" class="btn btn-outline-success btn-sm mt-auto" style="width: auto;">Перейти</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-3 d-flex">
+        <div class="card h-100 w-100">
+            <div class="card-body d-flex flex-column align-items-center text-center">
+                <h5>Тесты</h5>
+                <p class="text-muted">Создание и управление тестами</p>
+                <a href="{% url 'profiles:admin_test_list' %}" class="btn btn-outline-success btn-sm mt-auto" style="width: auto;">Перейти</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-3 d-flex">
+        <div class="card h-100 w-100">
+            <div class="card-body d-flex flex-column align-items-center text-center">
+                <h5>Документы</h5>
+                <p class="text-muted">Загрузка и управление документами</p>
+                <a href="{% url 'profiles:admin_document_list' %}" class="btn btn-outline-success btn-sm mt-auto" style="width: auto;">Перейти</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Блок Сотрудника -->
+{% if user_role == 'user' %}
+    {% if not user.isActive %}
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-6">
+                <div class="card text-center">
+                    <div class="card-body p-5">
+                        <h3 class="mb-3">Ожидание подтверждения</h3>
+                        <p class="text-muted mb-4">
+                            Ваша учетная запись еще не подтверждена администратором.
+                        </p>
+                        <div class="alert alert-success">
+                            После подтверждения вам станут доступны все функции системы.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <!-- УВЕДОМЛЕНИЕ О СТАТУСЕ С КРЕСТИКОМ -->
+        <div class="notification" id="work-status-notification">
+            <div class="notification-content">
+                {% if allowed_to_work_today %}
+                    Вы допущены к работам
+                {% else %}
+                    <div>Вы не допущены к работам</div>
+                    <small>
+                        <strong>Причины:</strong>
+                        <ul style="margin: 6px 0 0 18px; padding: 0;">
+                            {% for reason in deny_reasons %}
+                                <li>{{ reason }}</li>
+                            {% empty %}
+                                <li>Причина не определена.</li>
+                            {% endfor %}
+                        </ul>
+                    </small>
+                {% endif %}
+            </div>
+            <button class="notification-close" onclick="closeNotification('work-status-notification')">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+        
+        <!-- Блокировка -->
+        {% if user.active_block %}
+        <div class="notification" id="block-notification">
+            <div class="notification-content">
+                <strong>Вы заблокированы!</strong> 
+                Причина: {{ user.active_block.reason }}<br>
+                Блокировка действует до: {{ user.active_block.expires_at|date:"d.m.Y H:i" }}
+            </div>
+            <button class="notification-close" onclick="closeNotification('block-notification')">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+        {% endif %}
+        
+        <!-- Карточки функций -->
+        <div class="row mt-4">
+            <div class="col-md-3 mb-3">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="mt-3">Аттестации</h5>
+                        <p class="text-muted">
+                            {% if user.noCertifications %}
+                                Все пройдены
+                            {% else %}
+                                Пройдите аттестации
+                            {% endif %}
+                        </p>
+                        <a href="{% url 'profiles:user_test_list' %}" class="btn btn-outline-success">Перейти</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 mb-3">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="mt-3">Документы</h5>
+                        <p class="text-muted">
+                            {% if user.noDocuments %}
+                                Все подписаны
+                            {% else %}
+                                Требуются
+                            {% endif %}
+                        </p>
+                        <a href="{% url 'profiles:user_documents' %}" class="btn btn-outline-success">Перейти</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 mb-3">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="mt-3">Наряды</h5>
+                        <p class="text-muted">Доступные</p>
+                        <a href="{% url 'profiles:user_available_works' %}" class="btn btn-outline-success">Перейти</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 mb-3">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="mt-3">Мои наряды</h5>
+                        <p class="text-muted">Записи</p>
+                        <a href="{% url 'profiles:user_current_works' %}" class="btn btn-outline-success">Перейти</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- История тестов -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>История тестов</h5>
+                    </div>
+                    <div class="card-body">
+                        <a href="{% url 'profiles:user_test_history' %}" class="btn btn-outline-secondary">
+                            Посмотреть историю
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endif %}
+
+<script>
+function closeNotification(id) {
+    const notification = document.getElementById(id);
+    if (notification) {
+        notification.style.animation = 'fadeOut 0.3s ease';
+        setTimeout(() => {
+            notification.remove();
+        }, 200);
+    }
+}
+</script>
+{% endblock %}

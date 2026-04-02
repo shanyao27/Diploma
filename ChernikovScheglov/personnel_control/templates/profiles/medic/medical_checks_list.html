@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Журнал медосмотров{% endblock %}
+{% block content %}
+<h2 class="mb-4">Журнал медосмотров</h2>
+<div class="row g-3 mb-4">
+  <div class="col-md-6"><div class="card"><div class="card-body"><h5>Утренний осмотр, {{ today|date:"d.m.Y" }}</h5><div>Всего: {{ morning_total }}, прошли: {{ morning_passed }}, не прошли: {{ morning_missed }}</div></div></div></div>
+  <div class="col-md-6"><div class="card"><div class="card-body"><h5>Вечерний осмотр, {{ today|date:"d.m.Y" }}</h5><div>Всего: {{ evening_total }}, прошли: {{ evening_passed }}, не прошли: {{ evening_missed }}</div></div></div></div>
+</div>
+<div class="card mb-3"><div class="card-body"><form method="get" class="row g-2"><div class="col-md-4"><input type="text" name="q" value="{{ search_query }}" class="form-control" placeholder="Поиск по ФИО"></div><div class="col-md-3"><select name="department" class="form-select"><option value="">Все участки</option>{% for dep in departments %}<option value="{{ dep.id }}" {% if department_id == dep.id|stringformat:'s' %}selected{% endif %}>{{ dep.name }}</option>{% endfor %}</select></div><div class="col-md-2"><button class="btn btn-primary w-100">Фильтр</button></div><div class="col-md-3 text-end"><a href="{% url 'profiles:medic_medical_check_create' %}" class="btn btn-success">Новый осмотр</a></div></form></div></div>
+<div class="card"><div class="card-body"><div class="table-responsive"><table class="table table-bordered table-sm align-middle"><thead><tr><th>Дата</th><th>ФИО</th><th>Участок</th><th>Решение</th><th>Основание</th><th>Санкция</th><th>Комментарий</th></tr></thead><tbody>{% for item in checks %}<tr><td>{{ item.checked_at|date:"d.m.Y H:i" }}</td><td>{{ item.employee.FIO }}</td><td>{{ item.employee.department.name|default:'—' }}</td><td>{{ item.get_decision_display }}</td><td>{{ item.sanction_reason|default:'—' }}</td><td>{% if item.sanction_type %}{{ item.get_sanction_type_display }}{% else %}—{% endif %}</td><td>{{ item.comment|default:'—' }}</td></tr>{% empty %}<tr><td colspan="7" class="text-center text-muted">Нет записей</td></tr>{% endfor %}</tbody></table></div></div></div>
+{% endblock %}

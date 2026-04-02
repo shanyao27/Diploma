@@ -1,0 +1,63 @@
+<!-- profiles/templates/profiles/user/test_history.html -->
+{% extends "base.html" %}
+
+{% block title %}История тестов{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">История прохождения тестов</h1>
+    
+    {% if attempts %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Тест</th>
+                        <th>Дата начала</th>
+                        <th>Дата завершения</th>
+                        <th>Результат</th>
+                        <th>Правильных ответов</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for attempt in attempts %}
+                    <tr>
+                        <td>{{ attempt.test.title }}</td>
+                        <td>{{ attempt.started_at|date:"d.m.Y H:i" }}</td>
+                        <td>
+                            {% if attempt.completed_at %}
+                                {{ attempt.completed_at|date:"d.m.Y H:i" }}
+                            {% else %}
+                                <span class="badge bg-warning">Не завершен</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if attempt.passed %}
+                                <span class="badge bg-success">Сдано</span>
+                            {% elif attempt.completed_at %}
+                                <span class="badge bg-danger">Провалено</span>
+                            {% else %}
+                                <span class="badge bg-secondary">В процессе</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% with correct=attempt.answers.filter.is_correct.count total=attempt.answers.count %}
+                                {% if total > 0 %}
+                                    {{ correct }}/{{ total }}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            {% endwith %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-success">
+            Вы еще не проходили ни одного теста.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
