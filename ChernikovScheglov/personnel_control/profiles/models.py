@@ -198,12 +198,12 @@ class MedicalCheck(models.Model):
         verbose_name='Сотрудник',
     )
     medic = models.ForeignKey(
-        User,
+        'main_page.Medic',  # ← ИЗМЕНЕНО
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name='performed_medical_checks',
-        verbose_name='Медработник',
+        related_name='medical_checks',
+        verbose_name='Медработник'
     )
     check_type = models.CharField(max_length=20, choices=CHECK_TYPE_CHOICES, verbose_name='Тип осмотра')
     check_date = models.DateField(default=timezone.localdate, verbose_name='Дата осмотра')

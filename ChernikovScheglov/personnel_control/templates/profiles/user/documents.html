@@ -5,7 +5,22 @@
 {% block content %}
 <div class="container mt-4">
     <h2>Мои документы</h2>
-    
+ 
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5>Статус допуска к работам:</h5>
+            {% if user.noDocuments %}
+                <div class="alert alert-success">
+                    Все документы подписаны.
+                </div>
+            {% else %}
+                <div class="alert alert-success">
+                    Подпишите все документы (осталось: {{ pending_docs.count }})
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
     <!-- ДОКУМЕНТЫ, ТРЕБУЮЩИЕ ПОДПИСИ -->
     {% if pending_docs %}
     <div class="card mt-4 border-danger">
@@ -90,20 +105,5 @@
     </div>
     {% endif %}
     
-    <!-- СТАТУС ДОПУСКА -->
-    <div class="card mt-4">
-        <div class="card-body">
-            <h5>Статус допуска к работам:</h5>
-            {% if user.noDocuments %}
-                <div class="alert alert-success">
-                    Все документы подписаны. Вы допущены к работам.
-                </div>
-            {% else %}
-                <div class="alert alert-success">
-                    Подпишите все документы (осталось: {{ pending_docs.count }})
-                </div>
-            {% endif %}
-        </div>
-    </div>
 </div>
 {% endblock %}

@@ -1,0 +1,9 @@
+asgiref==3.11.1
+Django==5.2.12
+django-extensions==4.1
+numpy==2.4.3
+opencv-python==4.13.0.92
+Pillow==10.1.0
+python-dotenv==1.0.1
+sqlparse==0.5.5
+whitenoise==6.12.0

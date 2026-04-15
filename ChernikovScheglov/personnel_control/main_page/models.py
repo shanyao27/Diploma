@@ -15,6 +15,21 @@ class PublishedModel(models.Model):
 
     class Meta:
         abstract = True
+    
+    # ДОБАВЬТЕ ЭТИ МЕТОДЫ:
+    def set_password(self, raw_password):
+        """Хеширует пароль перед сохранением"""
+        self.password = make_password(raw_password)
+    
+    def check_password(self, raw_password):
+        """Проверяет пароль с хешем в БД"""
+        return check_password(raw_password, self.password)
+    
+    def save(self, *args, **kwargs):
+        # Хешируем пароль, если он еще не захеширован
+        if self.password and not self.password.startswith(('pbkdf2_', 'bcrypt_', 'argon2')):
+            self.password = make_password(self.password)
+        super().save(*args, **kwargs)
 
 
 class Department(models.Model):
@@ -104,7 +119,28 @@ class Inspector(PublishedModel):
 
     def __str__(self):
         return self.full_name or self.login
-
+    
+    
+class Medic(PublishedModel):
+    """Модель медработника (аналогична Inspector)"""
+    
+    full_name = models.CharField(max_length=255, blank=True, verbose_name="ФИО")
+    department = models.ForeignKey(
+        Department,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='medics',
+        verbose_name='Закрепленный участок',
+    )
+    
+    class Meta:
+        verbose_name = "медработник"
+        verbose_name_plural = "Медработники"
+    
+    def __str__(self):
+        return self.full_name or self.login
+    
 
 class User(models.Model):
     """Модель сотрудника"""
@@ -135,9 +171,9 @@ class User(models.Model):
     SYSTEM_ROLE_CHOICES = [
         ('employee', 'Сотрудник'),
         ('manager', 'Начальник участка'),
-        ('medic', 'Медработник'),
-        ('inspector', 'Инспектор'),
-        ('global_admin', 'Глобальный администратор'),
+        # ('medic', 'Медработник'),
+        # ('inspector', 'Инспектор'),
+        # ('global_admin', 'Глобальный администратор'),
     ]
 
     passportData = models.CharField(

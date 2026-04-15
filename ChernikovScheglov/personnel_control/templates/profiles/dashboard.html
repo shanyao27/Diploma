@@ -9,6 +9,7 @@
         Вы вошли как: <strong>{{ user_login }}</strong> 
         ({% if user_role == 'admin' %}Администратор
         {% elif user_role == 'inspector' %}Инспектор
+        {% elif user_role == 'medic' %}Медработник
         {% elif user_role == 'user' %}Сотрудник{% endif %})
     </div>
     <button class="notification-close" onclick="closeNotification('login-notification')">
@@ -55,6 +56,21 @@
                 <h5>Документы</h5>
                 <p class="text-muted">Загрузка и управление документами</p>
                 <a href="{% url 'profiles:admin_document_list' %}" class="btn btn-outline-success btn-sm mt-auto" style="width: auto;">Перейти</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Блок Инспектора -->
+{% if user_role == 'inspector' %}
+<div class="row mt-4">
+    <div class="col-md-4 mb-3 d-flex">
+        <div class="card h-100 w-100">
+            <div class="card-body d-flex flex-column align-items-center text-center">
+                <h5>Проверка СИЗ по видео</h5>
+                <p class="text-muted">Проверка соблюдения безопасности рабочих</p>
+                <a href="{% url 'profiles:inspector_video_inspections' %}" class="btn btn-outline-success btn-sm mt-auto" style="width: auto;">Перейти</a>
             </div>
         </div>
     </div>
@@ -118,61 +134,50 @@
         </div>
         {% endif %}
         
-        <!-- Карточки функций -->
-        <div class="row mt-4">
-            <div class="col-md-3 mb-3">
-                <div class="card h-100">
-                    <div class="card-body text-center">
-                        <h5 class="mt-3">Аттестации</h5>
-                        <p class="text-muted">
-                            {% if user.noCertifications %}
-                                Все пройдены
-                            {% else %}
-                                Пройдите аттестации
-                            {% endif %}
-                        </p>
-                        <a href="{% url 'profiles:user_test_list' %}" class="btn btn-outline-success">Перейти</a>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-md-3 mb-3">
-                <div class="card h-100">
-                    <div class="card-body text-center">
-                        <h5 class="mt-3">Документы</h5>
-                        <p class="text-muted">
-                            {% if user.noDocuments %}
-                                Все подписаны
-                            {% else %}
-                                Требуются
-                            {% endif %}
-                        </p>
-                        <a href="{% url 'profiles:user_documents' %}" class="btn btn-outline-success">Перейти</a>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-md-3 mb-3">
-                <div class="card h-100">
-                    <div class="card-body text-center">
-                        <h5 class="mt-3">Наряды</h5>
-                        <p class="text-muted">Доступные</p>
-                        <a href="{% url 'profiles:user_available_works' %}" class="btn btn-outline-success">Перейти</a>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-md-3 mb-3">
-                <div class="card h-100">
-                    <div class="card-body text-center">
-                        <h5 class="mt-3">Мои наряды</h5>
-                        <p class="text-muted">Записи</p>
-                        <a href="{% url 'profiles:user_current_works' %}" class="btn btn-outline-success">Перейти</a>
-                    </div>
-                </div>
+  <!-- Карточки функций -->
+<div class="row mt-4">
+    <div class="col-md-4 mb-3 d-flex">
+        <div class="card h-100 w-100">
+            <div class="card-body text-center">
+                <h5 class="mt-3">Аттестации</h5>
+                <p class="text-muted">
+                    {% if user.noCertifications %}
+                        Все пройдены
+                    {% else %}
+                        Пройдите аттестации
+                    {% endif %}
+                </p>
+                <a href="{% url 'profiles:user_test_list' %}" class="btn btn-outline-success">Перейти</a>
             </div>
         </div>
-        
+    </div>
+    
+    <div class="col-md-4 mb-3 d-flex">
+        <div class="card h-100 w-100">
+            <div class="card-body text-center">
+                <h5 class="mt-3">Документы</h5>
+                <p class="text-muted">
+                    {% if user.noDocuments %}
+                        Все подписаны
+                    {% else %}
+                        Требуются
+                    {% endif %}
+                </p>
+                <a href="{% url 'profiles:user_documents' %}" class="btn btn-outline-success">Перейти</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-3 d-flex">
+        <div class="card h-100 w-100">
+            <div class="card-body text-center">
+                <h5 class="mt-3">Мои наряды</h5>
+                <p class="text-muted mb-3">&nbsp;</p>
+                <a href="{% url 'profiles:user_current_works' %}" class="btn btn-outline-success">Перейти</a>
+            </div>
+        </div>
+    </div>
+</div>
         <!-- История тестов -->
         <div class="row mt-4">
             <div class="col-12">
@@ -189,6 +194,74 @@
             </div>
         </div>
     {% endif %}
+{% endif %}
+
+<!-- Блок Медработника -->
+{% if user_role == 'medic' %}
+<div class="row mt-4">
+    <div class="col-md-4 mb-3 d-flex">
+        <div class="card h-100 w-100">
+            <div class="card-body d-flex flex-column align-items-center text-center">
+                <h5>Сотрудники</h5>
+                <p class="text-muted">Просмотр списка сотрудников</p>
+                <a href="{% url 'profiles:medic_employees_list' %}" class="btn btn-outline-success btn-sm mt-auto" style="width: auto;">Перейти</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-3 d-flex">
+        <div class="card h-100 w-100">
+            <div class="card-body d-flex flex-column align-items-center text-center">
+                <h5>Медосмотры</h5>
+                <p class="text-muted">Просмотр и создание медосмотров</p>
+                <a href="{% url 'profiles:medic_medical_checks_list' %}" class="btn btn-outline-success btn-sm mt-auto" style="width: auto;">Перейти</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-3 d-flex">
+        <div class="card h-100 w-100">
+            <div class="card-body d-flex flex-column align-items-center text-center">
+                <h5>Больничные</h5>
+                <p class="text-muted">Просмотр и выдача больничных</p>
+                <a href="{% url 'profiles:medic_sick_leaves_list' %}" class="btn btn-outline-success btn-sm mt-auto" style="width: auto;">Перейти</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Статистика для медработника -->
+{% if medic_stats %}
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Статистика за сегодня</h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-md-3">
+                        <h3>{{ medic_stats.checks_total }}</h3>
+                        <p class="text-muted">Всего осмотров</p>
+                    </div>
+                    <div class="col-md-3">
+                        <h3 class="text-success">{{ medic_stats.fit_total }}</h3>
+                        <p class="text-muted">Допущены</p>
+                    </div>
+                    <div class="col-md-3">
+                        <h3 class="text-danger">{{ medic_stats.unfit_total }}</h3>
+                        <p class="text-muted">Не допущены</p>
+                    </div>
+                    <div class="col-md-3">
+                        <h3 class="text-warning">{{ medic_stats.sick_total }}</h3>
+                        <p class="text-muted">На больничном</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
 {% endif %}
 
 <script>

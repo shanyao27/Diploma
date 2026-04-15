@@ -159,8 +159,7 @@
                     <p><strong>Время:</strong> {{ wo.time|date:"d.m.Y H:i" }}</p>
                     
                     {% if wo.employees.count > 0 %}
-                        <div class="alert alert-warning">
-                            <i class="bi bi-exclamation-triangle"></i>
+                        <div class="alert alert-success">
                             Внимание! На этот наряд уже записано {{ wo.employees.count }} сотрудников. 
                             При удалении наряда все записи будут потеряны.
                         </div>

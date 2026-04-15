@@ -16,7 +16,6 @@
                         <th>Дата начала</th>
                         <th>Дата завершения</th>
                         <th>Результат</th>
-                        <th>Правильных ответов</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -35,19 +34,10 @@
                             {% if attempt.passed %}
                                 <span class="badge bg-success">Сдано</span>
                             {% elif attempt.completed_at %}
-                                <span class="badge bg-danger">Провалено</span>
+                                <span class="badge bg-danger">Не сдано</span>
                             {% else %}
                                 <span class="badge bg-secondary">В процессе</span>
                             {% endif %}
-                        </td>
-                        <td>
-                            {% with correct=attempt.answers.filter.is_correct.count total=attempt.answers.count %}
-                                {% if total > 0 %}
-                                    {{ correct }}/{{ total }}
-                                {% else %}
-                                    -
-                                {% endif %}
-                            {% endwith %}
                         </td>
                     </tr>
                     {% endfor %}

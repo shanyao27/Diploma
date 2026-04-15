@@ -1,0 +1,403 @@
+digraph model_graph {
+  // Dotfile by Django-Extensions graph_models
+  // Created: 2026-04-09 05:45
+  // Cli Options: profiles -g --disable-fields --hide-edge-labels
+
+  fontname = "Roboto"
+  fontsize = 8
+  splines  = true
+  rankdir = "TB"
+  
+
+  node [
+    fontname = "Roboto"
+    fontsize = 8
+    shape = "plaintext"
+  ]
+
+  edge [
+    fontname = "Roboto"
+    fontsize = 8
+  ]
+
+  // Labels
+  subgraph cluster_profiles {
+    label=<
+          <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0">
+          <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER">
+          <FONT FACE="Roboto" COLOR="Black" POINT-SIZE="10">
+          <B>profiles</B>
+          </FONT>
+          </TD></TR>
+          </TABLE>
+          >
+    color=olivedrab4
+    style="rounded"
+  
+    profiles_models_Camera [label=<
+      <TABLE BGCOLOR="white" BORDER="1" CELLBORDER="0" CELLSPACING="0">
+      <TR><TD COLSPAN="2" CELLPADDING="5" ALIGN="CENTER" BGCOLOR="#1b563f">
+      <FONT FACE="Roboto" COLOR="white" POINT-SIZE="10"><B>
+      Camera
+      </B></FONT></TD></TR>
+    
+      </TABLE>
+      >]
+  
+    profiles_models_ViolationType [label=<
+      <TABLE BGCOLOR="white" BORDER="1" CELLBORDER="0" CELLSPACING="0">
+      <TR><TD COLSPAN="2" CELLPADDING="5" ALIGN="CENTER" BGCOLOR="#1b563f">
+      <FONT FACE="Roboto" COLOR="white" POINT-SIZE="10"><B>
+      ViolationType
+      </B></FONT></TD></TR>
+    
+      </TABLE>
+      >]
+  
+    profiles_models_WorkObject [label=<
+      <TABLE BGCOLOR="white" BORDER="1" CELLBORDER="0" CELLSPACING="0">
+      <TR><TD COLSPAN="2" CELLPADDING="5" ALIGN="CENTER" BGCOLOR="#1b563f">
+      <FONT FACE="Roboto" COLOR="white" POINT-SIZE="10"><B>
+      WorkObject
+      </B></FONT></TD></TR>
+    
+      </TABLE>
+      >]
+  
+    profiles_models_MedicalCheck [label=<
+      <TABLE BGCOLOR="white" BORDER="1" CELLBORDER="0" CELLSPACING="0">
+      <TR><TD COLSPAN="2" CELLPADDING="5" ALIGN="CENTER" BGCOLOR="#1b563f">
+      <FONT FACE="Roboto" COLOR="white" POINT-SIZE="10"><B>
+      MedicalCheck
+      </B></FONT></TD></TR>
+    
+      </TABLE>
+      >]
+  
+    profiles_models_SickLeave [label=<
+      <TABLE BGCOLOR="white" BORDER="1" CELLBORDER="0" CELLSPACING="0">
+      <TR><TD COLSPAN="2" CELLPADDING="5" ALIGN="CENTER" BGCOLOR="#1b563f">
+      <FONT FACE="Roboto" COLOR="white" POINT-SIZE="10"><B>
+      SickLeave
+      </B></FONT></TD></TR>
+    
+      </TABLE>
+      >]
+  
+    profiles_models_Sanction [label=<
+      <TABLE BGCOLOR="white" BORDER="1" CELLBORDER="0" CELLSPACING="0">
+      <TR><TD COLSPAN="2" CELLPADDING="5" ALIGN="CENTER" BGCOLOR="#1b563f">
+      <FONT FACE="Roboto" COLOR="white" POINT-SIZE="10"><B>
+      Sanction
+      </B></FONT></TD></TR>
+    
+      </TABLE>
+      >]
+  
+    profiles_models_CertificationTest [label=<
+      <TABLE BGCOLOR="white" BORDER="1" CELLBORDER="0" CELLSPACING="0">
+      <TR><TD COLSPAN="2" CELLPADDING="5" ALIGN="CENTER" BGCOLOR="#1b563f">
+      <FONT FACE="Roboto" COLOR="white" POINT-SIZE="10"><B>
+      CertificationTest
+      </B></FONT></TD></TR>
+    
+      </TABLE>
+      >]
+  
+    profiles_models_Question [label=<
+      <TABLE BGCOLOR="white" BORDER="1" CELLBORDER="0" CELLSPACING="0">
+      <TR><TD COLSPAN="2" CELLPADDING="5" ALIGN="CENTER" BGCOLOR="#1b563f">
+      <FONT FACE="Roboto" COLOR="white" POINT-SIZE="10"><B>
+      Question
+      </B></FONT></TD></TR>
+    
+      </TABLE>
+      >]
+  
+    profiles_models_UserTestAttempt [label=<
+      <TABLE BGCOLOR="white" BORDER="1" CELLBORDER="0" CELLSPACING="0">
+      <TR><TD COLSPAN="2" CELLPADDING="5" ALIGN="CENTER" BGCOLOR="#1b563f">
+      <FONT FACE="Roboto" COLOR="white" POINT-SIZE="10"><B>
+      UserTestAttempt
+      </B></FONT></TD></TR>
+    
+      </TABLE>
+      >]
+  
+    profiles_models_UserAnswer [label=<
+      <TABLE BGCOLOR="white" BORDER="1" CELLBORDER="0" CELLSPACING="0">
+      <TR><TD COLSPAN="2" CELLPADDING="5" ALIGN="CENTER" BGCOLOR="#1b563f">
+      <FONT FACE="Roboto" COLOR="white" POINT-SIZE="10"><B>
+      UserAnswer
+      </B></FONT></TD></TR>
+    
+      </TABLE>
+      >]
+  
+    profiles_models_UserBlock [label=<
+      <TABLE BGCOLOR="white" BORDER="1" CELLBORDER="0" CELLSPACING="0">
+      <TR><TD COLSPAN="2" CELLPADDING="5" ALIGN="CENTER" BGCOLOR="#1b563f">
+      <FONT FACE="Roboto" COLOR="white" POINT-SIZE="10"><B>
+      UserBlock
+      </B></FONT></TD></TR>
+    
+      </TABLE>
+      >]
+  
+    profiles_models_Document [label=<
+      <TABLE BGCOLOR="white" BORDER="1" CELLBORDER="0" CELLSPACING="0">
+      <TR><TD COLSPAN="2" CELLPADDING="5" ALIGN="CENTER" BGCOLOR="#1b563f">
+      <FONT FACE="Roboto" COLOR="white" POINT-SIZE="10"><B>
+      Document
+      </B></FONT></TD></TR>
+    
+      </TABLE>
+      >]
+  
+    profiles_models_DocumentSignature [label=<
+      <TABLE BGCOLOR="white" BORDER="1" CELLBORDER="0" CELLSPACING="0">
+      <TR><TD COLSPAN="2" CELLPADDING="5" ALIGN="CENTER" BGCOLOR="#1b563f">
+      <FONT FACE="Roboto" COLOR="white" POINT-SIZE="10"><B>
+      DocumentSignature
+      </B></FONT></TD></TR>
+    
+      </TABLE>
+      >]
+  
+    profiles_models_VideoInspection [label=<
+      <TABLE BGCOLOR="white" BORDER="1" CELLBORDER="0" CELLSPACING="0">
+      <TR><TD COLSPAN="2" CELLPADDING="5" ALIGN="CENTER" BGCOLOR="#1b563f">
+      <FONT FACE="Roboto" COLOR="white" POINT-SIZE="10"><B>
+      VideoInspection
+      </B></FONT></TD></TR>
+    
+      </TABLE>
+      >]
+  
+    profiles_models_ViolationSnapshot [label=<
+      <TABLE BGCOLOR="white" BORDER="1" CELLBORDER="0" CELLSPACING="0">
+      <TR><TD COLSPAN="2" CELLPADDING="5" ALIGN="CENTER" BGCOLOR="#1b563f">
+      <FONT FACE="Roboto" COLOR="white" POINT-SIZE="10"><B>
+      ViolationSnapshot
+      </B></FONT></TD></TR>
+    
+      </TABLE>
+      >]
+
+  }
+
+
+  // Relations
+  main_page_models_Department [label=<
+  <TABLE BGCOLOR="white" BORDER="0" CELLBORDER="0" CELLSPACING="0">
+  <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="#1b563f">
+  <FONT FACE="Roboto" POINT-SIZE="12" COLOR="white">Department</FONT>
+  </TD></TR>
+  </TABLE>
+  >]
+  profiles_models_Camera -> main_page_models_Department
+  [label=" "] [arrowhead=none, arrowtail=dot, dir=both];
+  main_page_models_Department [label=<
+  <TABLE BGCOLOR="white" BORDER="0" CELLBORDER="0" CELLSPACING="0">
+  <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="#1b563f">
+  <FONT FACE="Roboto" POINT-SIZE="12" COLOR="white">Department</FONT>
+  </TD></TR>
+  </TABLE>
+  >]
+  profiles_models_WorkObject -> main_page_models_Department
+  [label=" "] [arrowhead=none, arrowtail=dot, dir=both];
+  main_page_models_User [label=<
+  <TABLE BGCOLOR="white" BORDER="0" CELLBORDER="0" CELLSPACING="0">
+  <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="#1b563f">
+  <FONT FACE="Roboto" POINT-SIZE="12" COLOR="white">User</FONT>
+  </TD></TR>
+  </TABLE>
+  >]
+  profiles_models_WorkObject -> main_page_models_User
+  [label=" "] [arrowhead=none, arrowtail=dot, dir=both];
+  main_page_models_Admin [label=<
+  <TABLE BGCOLOR="white" BORDER="0" CELLBORDER="0" CELLSPACING="0">
+  <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="#1b563f">
+  <FONT FACE="Roboto" POINT-SIZE="12" COLOR="white">Admin</FONT>
+  </TD></TR>
+  </TABLE>
+  >]
+  profiles_models_WorkObject -> main_page_models_Admin
+  [label=" "] [arrowhead=none, arrowtail=dot, dir=both];
+  main_page_models_User [label=<
+  <TABLE BGCOLOR="white" BORDER="0" CELLBORDER="0" CELLSPACING="0">
+  <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="#1b563f">
+  <FONT FACE="Roboto" POINT-SIZE="12" COLOR="white">User</FONT>
+  </TD></TR>
+  </TABLE>
+  >]
+  profiles_models_WorkObject -> main_page_models_User
+  [label=" "] [arrowhead=dot arrowtail=dot, dir=both];
+  main_page_models_User [label=<
+  <TABLE BGCOLOR="white" BORDER="0" CELLBORDER="0" CELLSPACING="0">
+  <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="#1b563f">
+  <FONT FACE="Roboto" POINT-SIZE="12" COLOR="white">User</FONT>
+  </TD></TR>
+  </TABLE>
+  >]
+  profiles_models_MedicalCheck -> main_page_models_User
+  [label=" "] [arrowhead=none, arrowtail=dot, dir=both];
+  main_page_models_User [label=<
+  <TABLE BGCOLOR="white" BORDER="0" CELLBORDER="0" CELLSPACING="0">
+  <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="#1b563f">
+  <FONT FACE="Roboto" POINT-SIZE="12" COLOR="white">User</FONT>
+  </TD></TR>
+  </TABLE>
+  >]
+  profiles_models_MedicalCheck -> main_page_models_User
+  [label=" "] [arrowhead=none, arrowtail=dot, dir=both];
+  main_page_models_User [label=<
+  <TABLE BGCOLOR="white" BORDER="0" CELLBORDER="0" CELLSPACING="0">
+  <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="#1b563f">
+  <FONT FACE="Roboto" POINT-SIZE="12" COLOR="white">User</FONT>
+  </TD></TR>
+  </TABLE>
+  >]
+  profiles_models_SickLeave -> main_page_models_User
+  [label=" "] [arrowhead=none, arrowtail=dot, dir=both];
+  main_page_models_User [label=<
+  <TABLE BGCOLOR="white" BORDER="0" CELLBORDER="0" CELLSPACING="0">
+  <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="#1b563f">
+  <FONT FACE="Roboto" POINT-SIZE="12" COLOR="white">User</FONT>
+  </TD></TR>
+  </TABLE>
+  >]
+  profiles_models_SickLeave -> main_page_models_User
+  [label=" "] [arrowhead=none, arrowtail=dot, dir=both];
+  main_page_models_User [label=<
+  <TABLE BGCOLOR="white" BORDER="0" CELLBORDER="0" CELLSPACING="0">
+  <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="#1b563f">
+  <FONT FACE="Roboto" POINT-SIZE="12" COLOR="white">User</FONT>
+  </TD></TR>
+  </TABLE>
+  >]
+  profiles_models_Sanction -> main_page_models_User
+  [label=" "] [arrowhead=none, arrowtail=dot, dir=both];
+
+  profiles_models_Sanction -> profiles_models_ViolationType
+  [label=" "] [arrowhead=none, arrowtail=dot, dir=both];
+
+  profiles_models_Sanction -> profiles_models_WorkObject
+  [label=" "] [arrowhead=none, arrowtail=dot, dir=both];
+  main_page_models_Admin [label=<
+  <TABLE BGCOLOR="white" BORDER="0" CELLBORDER="0" CELLSPACING="0">
+  <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="#1b563f">
+  <FONT FACE="Roboto" POINT-SIZE="12" COLOR="white">Admin</FONT>
+  </TD></TR>
+  </TABLE>
+  >]
+  profiles_models_Sanction -> main_page_models_Admin
+  [label=" "] [arrowhead=none, arrowtail=dot, dir=both];
+  main_page_models_Department [label=<
+  <TABLE BGCOLOR="white" BORDER="0" CELLBORDER="0" CELLSPACING="0">
+  <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="#1b563f">
+  <FONT FACE="Roboto" POINT-SIZE="12" COLOR="white">Department</FONT>
+  </TD></TR>
+  </TABLE>
+  >]
+  profiles_models_CertificationTest -> main_page_models_Department
+  [label=" "] [arrowhead=none, arrowtail=dot, dir=both];
+  main_page_models_Admin [label=<
+  <TABLE BGCOLOR="white" BORDER="0" CELLBORDER="0" CELLSPACING="0">
+  <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="#1b563f">
+  <FONT FACE="Roboto" POINT-SIZE="12" COLOR="white">Admin</FONT>
+  </TD></TR>
+  </TABLE>
+  >]
+  profiles_models_CertificationTest -> main_page_models_Admin
+  [label=" "] [arrowhead=none, arrowtail=dot, dir=both];
+  main_page_models_Inspector [label=<
+  <TABLE BGCOLOR="white" BORDER="0" CELLBORDER="0" CELLSPACING="0">
+  <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="#1b563f">
+  <FONT FACE="Roboto" POINT-SIZE="12" COLOR="white">Inspector</FONT>
+  </TD></TR>
+  </TABLE>
+  >]
+  profiles_models_CertificationTest -> main_page_models_Inspector
+  [label=" "] [arrowhead=none, arrowtail=dot, dir=both];
+
+  profiles_models_Question -> profiles_models_CertificationTest
+  [label=" "] [arrowhead=none, arrowtail=dot, dir=both];
+  main_page_models_User [label=<
+  <TABLE BGCOLOR="white" BORDER="0" CELLBORDER="0" CELLSPACING="0">
+  <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="#1b563f">
+  <FONT FACE="Roboto" POINT-SIZE="12" COLOR="white">User</FONT>
+  </TD></TR>
+  </TABLE>
+  >]
+  profiles_models_UserTestAttempt -> main_page_models_User
+  [label=" "] [arrowhead=none, arrowtail=dot, dir=both];
+
+  profiles_models_UserTestAttempt -> profiles_models_CertificationTest
+  [label=" "] [arrowhead=none, arrowtail=dot, dir=both];
+
+  profiles_models_UserAnswer -> profiles_models_UserTestAttempt
+  [label=" "] [arrowhead=none, arrowtail=dot, dir=both];
+
+  profiles_models_UserAnswer -> profiles_models_Question
+  [label=" "] [arrowhead=none, arrowtail=dot, dir=both];
+  main_page_models_User [label=<
+  <TABLE BGCOLOR="white" BORDER="0" CELLBORDER="0" CELLSPACING="0">
+  <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="#1b563f">
+  <FONT FACE="Roboto" POINT-SIZE="12" COLOR="white">User</FONT>
+  </TD></TR>
+  </TABLE>
+  >]
+  profiles_models_UserBlock -> main_page_models_User
+  [label=" "] [arrowhead=none, arrowtail=dot, dir=both];
+  main_page_models_Admin [label=<
+  <TABLE BGCOLOR="white" BORDER="0" CELLBORDER="0" CELLSPACING="0">
+  <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="#1b563f">
+  <FONT FACE="Roboto" POINT-SIZE="12" COLOR="white">Admin</FONT>
+  </TD></TR>
+  </TABLE>
+  >]
+  profiles_models_Document -> main_page_models_Admin
+  [label=" "] [arrowhead=none, arrowtail=dot, dir=both];
+  main_page_models_User [label=<
+  <TABLE BGCOLOR="white" BORDER="0" CELLBORDER="0" CELLSPACING="0">
+  <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="#1b563f">
+  <FONT FACE="Roboto" POINT-SIZE="12" COLOR="white">User</FONT>
+  </TD></TR>
+  </TABLE>
+  >]
+  profiles_models_DocumentSignature -> main_page_models_User
+  [label=" "] [arrowhead=none, arrowtail=dot, dir=both];
+
+  profiles_models_DocumentSignature -> profiles_models_Document
+  [label=" "] [arrowhead=none, arrowtail=dot, dir=both];
+  main_page_models_Inspector [label=<
+  <TABLE BGCOLOR="white" BORDER="0" CELLBORDER="0" CELLSPACING="0">
+  <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="#1b563f">
+  <FONT FACE="Roboto" POINT-SIZE="12" COLOR="white">Inspector</FONT>
+  </TD></TR>
+  </TABLE>
+  >]
+  profiles_models_VideoInspection -> main_page_models_Inspector
+  [label=" "] [arrowhead=none, arrowtail=dot, dir=both];
+
+  profiles_models_VideoInspection -> profiles_models_WorkObject
+  [label=" "] [arrowhead=none, arrowtail=dot, dir=both];
+
+  profiles_models_VideoInspection -> profiles_models_Camera
+  [label=" "] [arrowhead=none, arrowtail=dot, dir=both];
+
+  profiles_models_ViolationSnapshot -> profiles_models_VideoInspection
+  [label=" "] [arrowhead=none, arrowtail=dot, dir=both];
+  main_page_models_User [label=<
+  <TABLE BGCOLOR="white" BORDER="0" CELLBORDER="0" CELLSPACING="0">
+  <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="#1b563f">
+  <FONT FACE="Roboto" POINT-SIZE="12" COLOR="white">User</FONT>
+  </TD></TR>
+  </TABLE>
+  >]
+  profiles_models_ViolationSnapshot -> main_page_models_User
+  [label=" "] [arrowhead=none, arrowtail=dot, dir=both];
+
+
+}
